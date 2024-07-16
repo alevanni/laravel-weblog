@@ -9,8 +9,12 @@ Route::get('/articles', [ArticleController::class, 'index'])->name('articles.ind
 Route::redirect('/', '/articles');
 
 //CREATE PAGE AND STORE REQUEST
-Route::get('/articles/{user}/create', function () {})->name('articles.create');
-Route::post('/articles/{user}', function () {})->name('articles.store');
+Route::get('/articles/create', function () { 
+    return view('articles.create');
+
+})->name('articles.create');
+Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+Route::get('articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 //EDIT PAGE AND UPDATE REQUEST
 Route::get('/articles/{user}/{article}/edit', function () {})->name('articles.edit');
 Route::put('/articles/{user}/{article}', function () {})->name('articles.update');

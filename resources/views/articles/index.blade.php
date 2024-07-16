@@ -1,19 +1,15 @@
-<h1>Articles</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Text</th>
-        </tr>
-    </thead>
-    <tbody>
-     @foreach($articles as $article)
-            <tr>
-                <td>{{ $article->title }}</td>
-                <td>{{ $article->body }}</td>
-      
-             </tr>
-      @endforeach
-    </tbody>
-</table>
+
+@extends('layouts.app')
+
+@section('title', 'All Articles')
+
+@section('content')
+<h1>Articles</h1>
+@foreach ($articles as $article)
+  @include('partials.card', ['article' => $article]);
+@endforeach
+@endsection
+
+
+    

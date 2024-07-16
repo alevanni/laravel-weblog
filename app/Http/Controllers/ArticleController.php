@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Article;
-
+use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -12,9 +13,10 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::all();
+        $articles = Article::orderBy('created_at', 'desc')->get();
         //dd($articles);
-        return view('articles.index', compact('articles'));
+        $authors = User::all();
+        return view('articles.index', compact('articles', 'authors'));
     }
 
     /**
@@ -30,15 +32,28 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request);
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required|max:1000',
+            'premium' => 'nullable',
+        ]);
+        
+        Article::create($validated);
+        return redirect()->route('articles.index');
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Article $article)
     {
-        //
+        $author = User::findOrFail($article->user_id);
+        $comments = Comment::where('article_id', $article->id)->get();
+        $users = User::all();
+        //dd(compact('comments'));
+        return view('articles.article', compact('article', 'author', 'comments', 'users'));
     }
 
     /**

@@ -1,0 +1,43 @@
+body {
+    background-color: rgb(219, 213, 213);
+}
+
+.card {
+    border: 2px solid black;
+    padding: 10px;
+    
+    margin: 10px; 
+    display: inline-block;
+    height: fit-content;
+    width: 30%;
+}
+
+.my-nav li {
+    margin: 10px; 
+    display: inline-block;
+    
+}
+
+.my-nav {
+    background-color: rgb(149, 173, 144);
+}
+
+.badge {
+    width: fit-content;
+    padding:  4px 8px;
+    border-radius: 5px;
+}
+.free {
+    background-color: rgb(149, 177, 121);
+}
+
+.premium {
+    background-color: gold;
+}
+
+.article-date {
+  font-size: smaller;
+}
+.comment-author {
+    font-weight: bold;
+}

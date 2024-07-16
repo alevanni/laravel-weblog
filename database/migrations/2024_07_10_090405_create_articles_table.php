@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('body');
-            $table->boolean('premium');
-            //$table->foreignId(úser_id);
+            $table->boolean('premium')->default(false);
+            $table->foreignId('user_id');
             $table->timestamps();
         });
     }
