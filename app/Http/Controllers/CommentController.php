@@ -1,21 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\Comment;
-use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\StoreCommentRequest;
 
-class ArticleController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $articles = Article::orderBy('created_at', 'desc')->get();
-        return view('articles.index', compact('articles'));
+        //
     }
 
     /**
@@ -29,24 +28,22 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreArticleRequest $request)
+    public function store(StoreCommentRequest $request, Article $article)
     {
-        $validated = $request->validated();
+        $validated = $request->validated() ;
         $validated['user_id'] = 1; 
-        Article::create($validated);
-        return redirect()->route('articles.index');
+        $validated['article_id'] = $article->id; 
+        Comment::create($validated);
+        return redirect()->route('articles.show', $article->id);
         
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show(string $id)
     {
-        $comments = $article->comments;
-        $article->load('user', 'comments.user');
-        //dd($article);
-        return view('articles.article', compact('article', 'comments'));
+        //
     }
 
     /**

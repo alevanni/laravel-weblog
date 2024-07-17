@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 
 //HOME PAGE
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 
 Route::redirect('/', '/articles');
 
-//CREATE PAGE AND STORE REQUEST
+//CREATE ARTICLE PAGE AND STORE REQUEST
 Route::get('/articles/create', function () { 
     return view('articles.create');
 
@@ -20,3 +21,6 @@ Route::get('/articles/{user}/{article}/edit', function () {})->name('articles.ed
 Route::put('/articles/{user}/{article}', function () {})->name('articles.update');
 //ARTICLE DELETE REQUEST
 Route::delete('/articles/{user}/{article}', function () {})->name('articles.destroy');
+
+//POST A NEW COMMENT UNDER A SPECIFIC ARTICLE
+Route::post('/articles/{article}', [CommentController::class, 'store'])->name('comments.store');

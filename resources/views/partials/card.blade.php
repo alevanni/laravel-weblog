@@ -1,6 +1,6 @@
 <div class="card">
    <h2>{{ $article->title }}</h2>
-   <h4>Written by {{ $authors->where('id', $article->user_id)->first()->name }}</h4>
+   <h4>Written by {{ $article->user->name }}</h4>
    <p>{{ $article->created_at }}</p>
    <p>{{  Str::limit($article->body, 40) }} <a href="{{ route('articles.show', $article->id)}}">Read more... </a></p>
    @if ($article->premium)

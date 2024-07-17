@@ -13,11 +13,12 @@
      <p class='badge free'>Free content</p>
 @endif
 <h1> {{$article->title}}</h1>
-<h2>Written by: {{$author->name}}</h2>
+<h2>Written by: {{$article->user->name}}</h2>
 <p class="article-date">{{$article->created_at}}</p>
 <p class="article-text">{{$article->body}}</p>
 <h2>Comments: </h2>
 @foreach ($comments as $comment)
-  @include('partials.comment', ['comment' => $comment]);
+  @include('partials.comment', ['comment' => $comment])
 @endforeach
+@include('partials.create-comment')
 @endsection
