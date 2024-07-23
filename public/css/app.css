@@ -41,3 +41,6 @@ body {
 .comment-author {
     font-weight: bold;
 }
+.error {
+    color: red;
+}

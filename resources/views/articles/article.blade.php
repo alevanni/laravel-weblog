@@ -13,7 +13,7 @@
      <p class='badge free'>Free content</p>
 @endif
 <h1> {{$article->title}}</h1>
-<h2>Written by: {{$article->user->name}}</h2>
+<h2>Written by: {{$article->user->username}}</h2>
 <p class="article-date">{{$article->created_at}}</p>
 <p class="article-text">{{$article->body}}</p>
 <h2>Comments: </h2>
