@@ -1,6 +1,7 @@
 <div class="card">
-    <a href="">Edit article</a>
-    <form action="{{ route('articles.destroy', [$user->id, $article->id]) }}" method="POST">
+    <a href="{{ route('articles.show', $article->id)}}">Read the article</a>
+    <a href="{{route('articles.users.edit', [$user->id, $article->id])}}">Edit article</a>
+    <form action="{{ route('articles.users.destroy', [$user->id, $article->id]) }}" method="POST">
         @csrf
         @method('DELETE')
         <button type="submit">Delete</button>
@@ -13,3 +14,4 @@
      <p class='badge free'>Free content</p>
    @endif
 </div>
+

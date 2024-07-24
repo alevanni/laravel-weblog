@@ -8,30 +8,30 @@ use App\Http\Controllers\UserController;
 
 //HOME PAGE
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-
+Route::get('/articles/users/', [UserController::class, 'index'])->name('articles.users.index');
 Route::redirect('/', '/articles');
 
 //CREATE ARTICLE PAGE AND STORE REQUEST
-Route::get('/articles/create', function () { 
-    return view('articles.create');
-
-})->name('articles.create');
+Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
 
 
-//LOG IN PAGE
+//LOG IN PAGE AND LOG OUT
 Route::get('/articles/login-page', function () {
     return view('articles.login-page');
 })->name('articles.login-page');
+Route::get('/articles/logout', [LoginController::class, 'logOut'])->name('articles.logout');
 Route::post('/articles/login-page', [LoginController::class, 'authenticate'])->name('articles.login');
 Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 
 
 //EDIT PAGE AND UPDATE REQUEST
+
 Route::get('/articles/users/{user}', [UserController::class, 'show'])->name('articles.users.show');
-Route::delete('/articles/users/{user}/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-Route::get('/articles/{user}/{article}/edit', function () {})->name('articles.edit');
-Route::put('/articles/{user}/{article}', function () {})->name('articles.update');
+
+Route::delete('/articles/users/{user}/{article}', [ArticleController::class, 'destroy'])->name('articles.users.destroy');
+Route::get('/articles/users/{user}/{article}/edit', [ArticleController::class, 'edit'])->name('articles.users.edit');
+Route::put('/articles/users/{user}/{article}', [ArticleController::class, 'update'])->name('articles.users.update');
 //ARTICLE DELETE REQUEST
 
 

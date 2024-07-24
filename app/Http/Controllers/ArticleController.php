@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreArticleRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -15,6 +16,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::orderBy('created_at', 'desc')->get();
+
         return view('articles.index', compact('articles'));
     }
 
@@ -23,7 +25,15 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        $user = Auth::user();
+
+        if ($user == null) {
+
+            return redirect()->route('articles.login-page');
+ 
+         }
+        
+        else return view('articles.create', compact('user'));
     }
 
     /**
@@ -32,8 +42,11 @@ class ArticleController extends Controller
     public function store(StoreArticleRequest $request)
     {
         $validated = $request->validated();
-        $validated['user_id'] = 1; 
+
+        $validated['user_id'] =  Auth::user()->id; 
+
         Article::create($validated);
+
         return redirect()->route('articles.index');
         
     }
@@ -44,25 +57,46 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         $comments = $article->comments;
+
         $article->load('user', 'comments.user');
-        //dd($article);
+     
         return view('articles.article', compact('article', 'comments'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit(User $user, Article $article)
+    {   
+        $user = Auth::user();
+        
+        if ($user == null) {
+
+            return redirect()->route('articles.login-page');
+ 
+         }
+
+        else {
+
+            if ($article->user->id == $user->id) return view('articles.edit', compact('user', 'article'));
+
+            else  return redirect()->route('articles.users.show', [$user->id]);
+            
+        }
+        
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreArticleRequest $request, User $user, Article $article)
     {
-        //
+        $validated = $request->validated();
+
+        $article->update($validated);
+
+        return redirect()->route('articles.users.show', [$user->id]);
+
     }
 
     /**

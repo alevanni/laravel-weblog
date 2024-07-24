@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 class UserController extends Controller
 {
     /**
@@ -11,7 +13,18 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        if ($user == null) {
+
+           return redirect()->route('articles.login-page');
+
+        }
+        
+        else {
+
+            return redirect()->route('articles.users.show', [$user->id]);
+
+        }
     }
 
     /**
@@ -35,10 +48,20 @@ class UserController extends Controller
      */
     public function show()
     {
-        $user = auth()->user();
-        $articles=$user->articles;
-        //dd($articles);
-        return view('articles.users.index', compact('user', 'articles'));
+        $user = Auth::user();
+        if ($user == null) {
+
+           return redirect()->route('articles.login-page');
+
+        }
+        
+        else {
+
+            $articles = $user->articles;
+
+            return view('users.index', compact('user', 'articles'));
+
+        }
     }
 
     /**

@@ -29,9 +29,18 @@ class LoginController extends Controller
             'message' => 'The provided credentials do not match our records.',
         ])->onlyInput('username');
     }
+
+    public function logOut() {
+
+        Auth::logout();
+
+        return redirect()->route('articles.login-page');
+    }
+
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         //
