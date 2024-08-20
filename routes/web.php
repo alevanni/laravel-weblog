@@ -5,6 +5,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 
 //HOME PAGE
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
@@ -13,7 +14,7 @@ Route::redirect('/', '/articles');
 
 //CREATE ARTICLE PAGE AND STORE REQUEST
 Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-
+Route::post('articles/categories/create', [CategoryController::class, 'store']) ->name('categories.store');
 
 //LOG IN PAGE AND LOG OUT
 Route::get('/articles/login-page', function () {
@@ -37,3 +38,6 @@ Route::put('/articles/users/{user}/{article}', [ArticleController::class, 'updat
 
 //POST A NEW COMMENT UNDER A SPECIFIC ARTICLE
 Route::post('/articles/{article}', [CommentController::class, 'store'])->name('comments.store');
+
+//CATEGORIES ROUTES
+Route::get('articles/categories/create', [CategoryController::class, 'create']) ->name('articles.categories.create');

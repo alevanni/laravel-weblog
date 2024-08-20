@@ -26,6 +26,7 @@ body {
     width: fit-content;
     padding:  4px 8px;
     border-radius: 5px;
+    background-color: antiquewhite;
 }
 .free {
     background-color: rgb(149, 177, 121);

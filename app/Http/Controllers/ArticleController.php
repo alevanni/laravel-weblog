@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreArticleRequest;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
@@ -16,7 +17,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::orderBy('created_at', 'desc')->get();
-
+        
         return view('articles.index', compact('articles'));
     }
 
@@ -26,27 +27,28 @@ class ArticleController extends Controller
     public function create()
     {
         $user = Auth::user();
-
+        $categories = Category::all();
         if ($user == null) {
 
             return redirect()->route('articles.login-page');
  
          }
         
-        else return view('articles.create', compact('user'));
+        else return view('articles.create', compact('user', 'categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreArticleRequest $request)
-    {
+    public function store(StoreArticleRequest $request, Category $category)
+    {   
+        
         $validated = $request->validated();
-
+        //dd($request);
         $validated['user_id'] =  Auth::user()->id; 
 
-        Article::create($validated);
-
+        $article = Article::create($validated);
+        $article -> categories() ->attach($request['category']) ;
         return redirect()->route('articles.index');
         
     }
@@ -69,7 +71,7 @@ class ArticleController extends Controller
     public function edit(User $user, Article $article)
     {   
         $user = Auth::user();
-        
+        $categories = Category::all();
         if ($user == null) {
 
             return redirect()->route('articles.login-page');
@@ -78,7 +80,7 @@ class ArticleController extends Controller
 
         else {
 
-            if ($article->user->id == $user->id) return view('articles.edit', compact('user', 'article'));
+            if ($article->user->id == $user->id) return view('articles.edit', compact('user', 'article', 'categories'));
 
             else  return redirect()->route('articles.users.show', [$user->id]);
             
@@ -92,9 +94,13 @@ class ArticleController extends Controller
     public function update(StoreArticleRequest $request, User $user, Article $article)
     {
         $validated = $request->validated();
+        
+        if ( !isset($validated['premium'])) {
+            $validated['premium'] = false;
+        }
 
         $article->update($validated);
-
+        $article->categories()->attach($request['category']);
         return redirect()->route('articles.users.show', [$user->id]);
 
     }
@@ -104,9 +110,10 @@ class ArticleController extends Controller
      */
     public function destroy(User $user, Article $article)
     {
-        $user = auth()->user();
-        //dd($article);
+        $user = Auth::user();
+        
         $article->delete();
+
         return redirect()->route('articles.users.show', $user);
 
     }

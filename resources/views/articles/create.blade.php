@@ -15,6 +15,8 @@
     <label for="premium">Premium</label>
     <input type="checkbox" id="premium" name="premium" value="1" />
     <br>
+    @include('partials.categories')
+    <br>
     <button type="submit">Submit</button>
 </form>
 @endsection

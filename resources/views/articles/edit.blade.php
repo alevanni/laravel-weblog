@@ -14,10 +14,12 @@
     <textarea id="body" name="body" rows="40" cols="50" >{{ $article->body}}</textarea>
     <br>
     <label for="premium">Premium</label>
-    <input type="checkbox" id="premium" name="premium" value="{{$article->premium}}"  
-         @if ( $article->premium == '1' ) checked='checked' : null @endif 
+    <input type="checkbox" id="premium" name="premium"  value='1'
+         @if ( $article->premium == '1' ) checked ='checked' : null @endif 
     />
 
+    <br>
+    @include('partials.categories')
     <br>
     <button type="submit">Submit</button>
 </form>

@@ -5,6 +5,7 @@
        <li><a href="{{ route('articles.create') }}">Write a new article</a></li>
        <li><a href="{{ route('articles.login-page') }}">Log in</a></li>
        <li><a href="{{ route('articles.logout') }}">Log out</a></li>
+       <li><a href="{{ route('articles.categories.create') }}">Manage tags</a></li>
     </ul>
 
 </nav>
