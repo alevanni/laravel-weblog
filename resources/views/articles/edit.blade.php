@@ -19,6 +19,11 @@
     />
 
     <br>
+    <h2>Existing tags</h2>
+    @include('partials.categories-badges')
+    <br>
+    <br>
+    <h2>Select a new tag</h2>
     @include('partials.categories')
     <br>
     <button type="submit">Submit</button>

@@ -14,7 +14,7 @@ Route::redirect('/', '/articles');
 
 //CREATE ARTICLE PAGE AND STORE REQUEST
 Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-Route::post('articles/categories/create', [CategoryController::class, 'store']) ->name('categories.store');
+
 
 //LOG IN PAGE AND LOG OUT
 Route::get('/articles/login-page', function () {
@@ -41,3 +41,5 @@ Route::post('/articles/{article}', [CommentController::class, 'store'])->name('c
 
 //CATEGORIES ROUTES
 Route::get('articles/categories/create', [CategoryController::class, 'create']) ->name('articles.categories.create');
+Route::post('articles/categories/create', [CategoryController::class, 'store']) ->name('categories.store');
+Route::get('articles/categories/', [CategoryController::class, 'show']) ->name('articles.categories.show');

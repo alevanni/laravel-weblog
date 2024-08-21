@@ -12,9 +12,7 @@
 @else
      <p class='badge free'>Free content</p>
 @endif
-@foreach ($article->categories as $category)
-   <span class='badge '>{{$category->name}}</span>
-   @endforeach
+@include('partials.categories-badges')
 <h1> {{$article->title}}</h1>
 <h2>Written by: {{$article->user->username}}</h2>
 <p class="article-date">{{$article->created_at}}</p>

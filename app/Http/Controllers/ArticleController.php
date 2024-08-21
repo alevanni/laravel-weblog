@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreArticleRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class ArticleController extends Controller
 {
@@ -16,9 +17,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('created_at', 'desc')->get();
-        
-        return view('articles.index', compact('articles'));
+        $articles = Article::with('categories', 'user')->orderBy('created_at', 'desc')->get();
+        $categories = Category::all();
+        return view('articles.index', compact('articles', 'categories'));
     }
 
     /**
@@ -71,7 +72,7 @@ class ArticleController extends Controller
     public function edit(User $user, Article $article)
     {   
         $user = Auth::user();
-        $categories = Category::all();
+        
         if ($user == null) {
 
             return redirect()->route('articles.login-page');
@@ -80,7 +81,14 @@ class ArticleController extends Controller
 
         else {
 
-            if ($article->user->id == $user->id) return view('articles.edit', compact('user', 'article', 'categories'));
+            if ($article->user->id == $user->id) {
+                  
+                  $categories = Category::whereDoesntHave('articles', function (Builder $query) use($article) {
+                    $query->where('article_id', $article->id);
+                })->get();
+                  //dd($categories);
+                  return view('articles.edit', compact('user', 'article', 'categories'));
+            }
 
             else  return redirect()->route('articles.users.show', [$user->id]);
             
@@ -100,6 +108,7 @@ class ArticleController extends Controller
         }
 
         $article->update($validated);
+        //dd($article->categories->has($request['category']));
         $article->categories()->attach($request['category']);
         return redirect()->route('articles.users.show', [$user->id]);
 
@@ -111,10 +120,22 @@ class ArticleController extends Controller
     public function destroy(User $user, Article $article)
     {
         $user = Auth::user();
+         
+        if ($user == null) {
+
+            return redirect()->route('articles.login-page');
+ 
+         }
+
+        else {
+
+            if ($article->user->id == $user->id) {
+                $article->categories()->detach();
+                $article->delete();
+                return redirect()->route('articles.users.show', $user);
+            }
+
         
-        $article->delete();
-
-        return redirect()->route('articles.users.show', $user);
-
+        }
     }
 }

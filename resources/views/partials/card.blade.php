@@ -8,7 +8,5 @@
    @else
      <p class='badge free'>Free content</p>
    @endif
-   @foreach ($article->categories as $category)
-   <span class='badge '>{{$category->name}}</span>
-   @endforeach
+  @include('partials.categories-badges')
 </div>
