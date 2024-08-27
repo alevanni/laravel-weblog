@@ -45,3 +45,8 @@ body {
 .error {
     color: red;
 }
+
+
+.validation-errors {
+    list-style-type: "\1f6a9";
+}

@@ -49,7 +49,10 @@ class ArticleController extends Controller
         $validated['user_id'] =  Auth::user()->id; 
 
         $article = Article::create($validated);
-        $article -> categories() ->attach($request['category']) ;
+        if ($request['category'] !==null) {
+            $article -> categories() ->attach($request['category']) ;
+        }
+        
         return redirect()->route('articles.index');
         
     }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('body');
             $table->boolean('premium')->default(false);
             $table->foreignId('user_id');
+            $table->string('image');
             $table->timestamps();
         });
     }

@@ -22,7 +22,21 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:25',
+            'name' => 'required|unique:categories,name|max:25',
         ];
     }
+
+    /**
+ * Get the error messages for the defined validation rules.
+ *
+ * @return array<string, string>
+ */
+public function messages(): array
+{
+    return [
+        'name.required' => 'A name is required',
+        'name.unique' => 'This category exists already',
+        'name.max' => 'The name is too long, max 25 char',
+    ];
+}
 }
