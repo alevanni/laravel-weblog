@@ -26,7 +26,7 @@ class StoreArticleRequest extends FormRequest
                 'title' => 'required|max:255',
                 'body' => 'required|max:1000',
                 'premium' => 'nullable',
-                
+                'image'=> 'required|mimes:png,jpg,jpeg|max:2048|regex:/^[a-z0-9_.-]*$/',
         ];
     }
 }

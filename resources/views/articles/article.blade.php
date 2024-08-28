@@ -14,6 +14,7 @@
 @endif
 @include('partials.categories-badges')
 <h1> {{$article->title}}</h1>
+<img src="{{asset('storage/images/'.$article->image)}}" alt="{{asset('storage/images/'.$article->image)}}"/>
 <h2>Written by: {{$article->user->username}}</h2>
 <p class="article-date">{{$article->created_at}}</p>
 <p class="article-text">{{$article->body}}</p>

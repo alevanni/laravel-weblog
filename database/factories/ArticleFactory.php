@@ -17,7 +17,7 @@ class ArticleFactory extends Factory
      */
     public function definition(): array
     {   
-        $url = "https://picsum.photos/1200/350?random=".mt_rand(1, 55000);
+        $url = "https://www.google.co.in/intl/en_com/images/srpr/logo1w.png";
         $contents = file_get_contents($url);
         $name = substr($url, strrpos($url, '/') + 1);
         Storage::disk('local')->put(('public/images/').$name, $contents);
