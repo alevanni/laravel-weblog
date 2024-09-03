@@ -16,11 +16,10 @@
     <input type="checkbox" id="premium" name="premium" value="1" />
     <br>
     <label for="image">Add an image</label>
-    <input type="file" id="image" name="image"  />
+    <input type="file" id="image" name="image" required/>
     <br>
     @include('partials.categories')
     <br>
-    <button type="submit">Submit</button>
     @if ($errors->any())
     <div >
         <ul class="validation-errors">
@@ -30,5 +29,6 @@
         </ul>
     </div>
     @endif
+    <button type="submit">Submit</button>
 </form>
 @endsection

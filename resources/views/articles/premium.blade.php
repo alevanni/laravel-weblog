@@ -1,11 +1,10 @@
 
-
 @extends('layouts.app')
 
-@section('title', $user->username)
+@section('title', 'Premium Content')
 
 @section('content')
-<h1>Articles by: {{$user->username}}</h1>
+<h1>Premium Articles</h1>
 @foreach ($articles as $article)
   @include('partials.dashboard-card', ['article' => $article])
 @endforeach

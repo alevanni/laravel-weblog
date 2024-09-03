@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Article;
 
 class UserController extends Controller
 {
@@ -22,7 +23,9 @@ class UserController extends Controller
         
         else {
 
-            return redirect()->route('articles.users.show', [$user->id]);
+            $articles = Article::whereBelongsTo($user)->orderBy('created_at', 'desc')->get();
+
+            return view('users.index', compact('user', 'articles'));
 
         }
     }
@@ -44,11 +47,12 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource. PREMIUM ARTICLES
      */
     public function show()
     {
         $user = Auth::user();
+        
         if ($user == null) {
 
            return redirect()->route('articles.login-page');
@@ -56,10 +60,13 @@ class UserController extends Controller
         }
         
         else {
+            if ($user->premium === 1) {
 
-            $articles = $user->articles;
+                $articles = Article::where('premium', 1)->orderBy('created_at', 'desc')->get();
+                return view('articles.premium', compact('user', 'articles'));
 
-            return view('users.index', compact('user', 'articles'));
+            }
+            else return redirect()->route('users.become-premium');
 
         }
     }
@@ -67,9 +74,11 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit()
     {
-        //
+        $user = Auth::user();
+        return view('users.become-premium', compact('user'));
+
     }
 
     /**

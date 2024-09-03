@@ -4,7 +4,7 @@
 
 @section('content')
 <h1>Edit your article</h1>
-<form action="{{ route('articles.users.update', [$user->id, $article->id]) }}" method="POST">
+<form action="{{ route('articles.users.update', [$user->id, $article->id]) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <label for="title">Title:</label>
@@ -17,6 +17,9 @@
     <input type="checkbox" id="premium" name="premium"  value='1'
          @if ( $article->premium == '1' ) checked ='checked' : null @endif 
     />
+    <br>
+    <label for="image">Modify image</label>
+    <input type="file" id="image" name="image"  />
 
     <br>
     <h2>Existing tags</h2>
@@ -26,6 +29,16 @@
     <h2>Select a new tag</h2>
     @include('partials.categories')
     <br>
+    <br>
+    @if ($errors->any())
+    <div >
+        <ul class="validation-errors">
+            @foreach ($errors->all() as $error)
+                <li class="error">{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <button type="submit">Submit</button>
 </form>
 @endsection

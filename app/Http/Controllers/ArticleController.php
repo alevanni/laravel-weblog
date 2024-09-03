@@ -44,12 +44,15 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request, Category $category)
     {   
-        //
+        
         $validated = $request->validated();
         
         $validated['user_id'] =  Auth::user()->id; 
         $image_name = $request->file('image')->getClientOriginalName();
         $file=file_get_contents($request->file('image'));
+        if (Storage::exists(('public/images/').$image_name) ){
+            $image_name = time()."_". $image_name;
+        }
         Storage::disk('local')->put(('public/images/').$image_name, $file );
         $validated['image']=$image_name;
         $article = Article::create($validated);
@@ -107,17 +110,47 @@ class ArticleController extends Controller
      * Update the specified resource in storage.
      */
     public function update(StoreArticleRequest $request, User $user, Article $article)
-    {
-        $validated = $request->validated();
+    {   
+        $user = Auth::user();
         
-        if ( !isset($validated['premium'])) {
-            $validated['premium'] = false;
-        }
+        if ($user == null) {
 
-        $article->update($validated);
-        //dd($article->categories->has($request['category']));
-        $article->categories()->attach($request['category']);
-        return redirect()->route('articles.users.show', [$user->id]);
+            return redirect()->route('articles.login-page');
+ 
+        }
+        
+        else { 
+
+            if ($article->user->id == $user->id) {
+
+                $validated = $request->validated();
+        
+                if ( !isset($validated['premium'])) {
+                    $validated['premium'] = false;
+                }
+                
+                if ( isset($validated['image'])) {
+                    if (Article::where('image', $article->image)->count() === 1 ) {
+                        Storage::delete( ('public/images/').$article->image );
+                    }
+                    $image_name = $request->file('image')->getClientOriginalName();
+                    $file = file_get_contents($request->file('image'));
+                    if (Storage::exists(('public/images/').$image_name) ){
+                        $image_name = time()."_". $image_name;
+                    }
+                    Storage::disk('local')->put(('public/images/').$image_name, $file );
+                    $validated['image']=$image_name;
+                }
+        
+                $article->update($validated);
+                
+                $article->categories()->attach($request['category']);
+                return redirect()->route('articles.users.show', [$user->id]);
+            }
+
+            else  return redirect()->route('articles.users.show', [$user->id]);
+        }
+        
 
     }
 
@@ -138,6 +171,9 @@ class ArticleController extends Controller
 
             if ($article->user->id == $user->id) {
                 $article->categories()->detach();
+                if (Article::where('image', $article->image)->count() === 1 ) {
+                    Storage::delete( ('public/images/').$article->image );
+                }
                 $article->delete();
                 return redirect()->route('articles.users.show', $user);
             }

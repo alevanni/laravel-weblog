@@ -7,9 +7,11 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 
-//HOME PAGE
+//HOME PAGES
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/users/', [UserController::class, 'index'])->name('articles.users.index');
+Route::get('/articles/users/premium', [UserController::class, 'show'])->name('articles.users.premium');
+Route::get('/users/become-premium', [UserController::class, 'edit'])->name('users.become-premium');
 Route::redirect('/', '/articles');
 
 //CREATE ARTICLE PAGE AND STORE REQUEST
@@ -28,7 +30,7 @@ Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('art
 
 //EDIT PAGE AND UPDATE REQUEST
 
-Route::get('/articles/users/{user}', [UserController::class, 'show'])->name('articles.users.show');
+
 
 Route::delete('/articles/users/{user}/{article}', [ArticleController::class, 'destroy'])->name('articles.users.destroy');
 Route::get('/articles/users/{user}/{article}/edit', [ArticleController::class, 'edit'])->name('articles.users.edit');

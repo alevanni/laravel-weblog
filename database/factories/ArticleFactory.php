@@ -23,7 +23,7 @@ class ArticleFactory extends Factory
         Storage::disk('local')->put(('public/images/').$name, $contents);
         return [
             'title' => $this->faker->sentence,
-            'body' => $this->faker->paragraph(7),
+            'body' => $this->faker->paragraph(70),
             'premium' => $this->faker->boolean(50),
             'user_id'=>User::inRandomOrder()->first()->id,
             'image' => $name
