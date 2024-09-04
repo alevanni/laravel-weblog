@@ -68,7 +68,15 @@ class ArticleController extends Controller
      * Display the specified resource.
      */
     public function show(Article $article)
-    {
+    {  
+        if ($article->premium === 1) {
+
+            $user = Auth::user();
+            
+            if ($user == null)  return redirect()->route('articles.login-page');
+            else if ($user->premium === 0 ) return redirect()-> route('users.become-premium', [$user->id]);
+            
+        }
         $comments = $article->comments;
 
         $article->load('user', 'comments.user');
@@ -100,7 +108,7 @@ class ArticleController extends Controller
                   return view('articles.edit', compact('user', 'article', 'categories'));
             }
 
-            else  return redirect()->route('articles.users.show', [$user->id]);
+            else  return redirect()->route('articles.users.index', [$user->id]);
             
         }
         
@@ -145,10 +153,10 @@ class ArticleController extends Controller
                 $article->update($validated);
                 
                 $article->categories()->attach($request['category']);
-                return redirect()->route('articles.users.show', [$user->id]);
+                return redirect()->route('articles.users.index', [$user->id]);
             }
 
-            else  return redirect()->route('articles.users.show', [$user->id]);
+            else  return redirect()->route('articles.users.index', [$user->id]);
         }
         
 
@@ -175,7 +183,7 @@ class ArticleController extends Controller
                     Storage::delete( ('public/images/').$article->image );
                 }
                 $article->delete();
-                return redirect()->route('articles.users.show', $user);
+                return redirect()->route('articles.users.index', $user);
             }
 
         

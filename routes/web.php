@@ -11,7 +11,6 @@ use App\Http\Controllers\CategoryController;
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/users/', [UserController::class, 'index'])->name('articles.users.index');
 Route::get('/articles/users/premium', [UserController::class, 'show'])->name('articles.users.premium');
-Route::get('/users/become-premium', [UserController::class, 'edit'])->name('users.become-premium');
 Route::redirect('/', '/articles');
 
 //CREATE ARTICLE PAGE AND STORE REQUEST
@@ -30,11 +29,13 @@ Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('art
 
 //EDIT PAGE AND UPDATE REQUEST
 
-
-
 Route::delete('/articles/users/{user}/{article}', [ArticleController::class, 'destroy'])->name('articles.users.destroy');
 Route::get('/articles/users/{user}/{article}/edit', [ArticleController::class, 'edit'])->name('articles.users.edit');
 Route::put('/articles/users/{user}/{article}', [ArticleController::class, 'update'])->name('articles.users.update');
+Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update-premium');
+Route::get('/users/{user}/become-premium', [UserController::class, 'edit'])->name('users.become-premium');
+
+
 //ARTICLE DELETE REQUEST
 
 

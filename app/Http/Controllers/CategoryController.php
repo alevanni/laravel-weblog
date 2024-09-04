@@ -49,7 +49,7 @@ class CategoryController extends Controller
        else {
             $validated = $request->validated();
             Category::create($validated);
-            return redirect()->route('articles.users.show', [$user->id]);
+            return redirect()->route('articles.users.index', [$user->id]);
        }  
        
     }

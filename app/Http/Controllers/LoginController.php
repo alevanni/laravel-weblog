@@ -22,7 +22,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
             $user=Auth::user();
             //dd($user);
-            return redirect()->route('articles.users.show', $user->id ); 
+            return redirect()->route('articles.users.index', $user->id ); 
         }
  
         return back()->withErrors([

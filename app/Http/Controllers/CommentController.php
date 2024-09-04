@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -30,11 +31,20 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, Article $article)
     {
-        $validated = $request->validated() ;
-        $validated['user_id'] = 1; 
-        $validated['article_id'] = $article->id; 
-        Comment::create($validated);
-        return redirect()->route('articles.show', $article->id);
+        $user = Auth::user();
+        if ($user == null) {
+
+           return redirect()->route('articles.login-page');
+
+        }
+        else {
+            $validated = $request->validated() ;
+            $validated['user_id'] = $user->id; 
+            $validated['article_id'] = $article->id; 
+            Comment::create($validated);
+            return redirect()->route('articles.show', $article->id);
+        }
+        
         
     }
 

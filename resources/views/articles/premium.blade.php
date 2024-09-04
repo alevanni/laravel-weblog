@@ -6,7 +6,7 @@
 @section('content')
 <h1>Premium Articles</h1>
 @foreach ($articles as $article)
-  @include('partials.dashboard-card', ['article' => $article])
+  @include('partials.card', ['article' => $article])
 @endforeach
 
 @endsection

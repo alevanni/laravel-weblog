@@ -10,7 +10,15 @@
 {{ $user->premium ===1 ? "Premium" : "Basic" }}
    
 </h2>
- <button> {{ $user->premium ===1 ? "Back to basic" : "Pay for premium membership" }} </button>
+<form action="{{ route('users.update-premium', [$user->id]) }}" method="POST"> 
+   @csrf
+   @method('PUT')
+   <label for="Become premium">Premium</label>
+   <input type="checkbox" id="premium" name="premium" value="1" />
+   <button type="submit"> Pay for premium membership </button>
+
+</form>
+
 
 
 

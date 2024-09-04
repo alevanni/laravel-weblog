@@ -66,7 +66,7 @@ class UserController extends Controller
                 return view('articles.premium', compact('user', 'articles'));
 
             }
-            else return redirect()->route('users.become-premium');
+            else return redirect()-> route('users.become-premium', [$user->id]);
 
         }
     }
@@ -77,16 +77,34 @@ class UserController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('users.become-premium', compact('user'));
+        if ($user == null) {
+
+            return redirect()->route('articles.login-page');
+ 
+         }
+        else return view('users.become-premium', compact('user'));
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $logged = Auth::user();
+        
+        if ($logged == null)  return redirect()->route('articles.login-page');
+
+        else if ($logged->id != $user->id) return redirect()->route('articles.users.index', [$logged->id]);
+
+        else {
+            
+            if ($request->premium === null) return redirect()-> route('users.become-premium', [$logged->id]);
+            else {
+                $user->update(['premium' => 1]);
+                return redirect()->route('articles.users.premium');
+            }
+        }
     }
 
     /**
