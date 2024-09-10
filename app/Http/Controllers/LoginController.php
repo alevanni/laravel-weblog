@@ -14,19 +14,24 @@ class LoginController extends Controller
     public function authenticate(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
+
             'username' => ['required'],
             'password' => ['required'],
+            
         ]);
  
         if (Auth::attempt($credentials)) {
+
             $request->session()->regenerate();
             $user=Auth::user();
-            //dd($user);
             return redirect()->route('articles.users.index', $user->id ); 
+
         }
  
         return back()->withErrors([
+
             'message' => 'The provided credentials do not match our records.',
+
         ])->onlyInput('username');
     }
 
@@ -34,7 +39,8 @@ class LoginController extends Controller
 
         Auth::logout();
 
-        return redirect()->route('articles.login-page');
+        return view('articles.login-page');
+
     }
 
     /**

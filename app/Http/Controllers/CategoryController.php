@@ -31,7 +31,9 @@ class CategoryController extends Controller
             return redirect()->route('articles.login-page');
  
          }
+
          else return view('articles.category-create');
+
     }
 
     /**
@@ -47,9 +49,11 @@ class CategoryController extends Controller
  
          }
        else {
+
             $validated = $request->validated();
             Category::create($validated);
             return redirect()->route('articles.users.index', [$user->id]);
+
        }  
        
     }
@@ -59,17 +63,24 @@ class CategoryController extends Controller
      */
     public function show(Request $request)
     {   
-        //dd($request['category']);
+        
         if ($request['category'] !== null)         {
+
             if ($request['category'] != 'null') {
+
                 $articles = Article::with('categories', 'user')->whereHas('categories', function (Builder $query) use ($request){
                     $query->where('category_id', $request['category']);
+
                 })->orderBy('created_at', 'desc')->get();
             }
+
             else {
+
                 $articles = Article::doesntHave('categories')->get();
             }
+
             $categories = Category::all();
+            
             return view('articles.index', compact('articles', 'categories'));
         }
         
