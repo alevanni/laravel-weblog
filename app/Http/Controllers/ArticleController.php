@@ -34,14 +34,9 @@ class ArticleController extends Controller
         $user = Auth::user();
         $categories = Category::all();
 
-        if ($user == null) {
-
-            return redirect()->route('articles.login-page');
- 
-         }
+        if ($user == null) return redirect()->route('articles.login-page');
         
-        else return view('articles.create', compact('user', 'categories'));
-
+        return view('articles.create', compact('user', 'categories'));
     }
 
     /**
@@ -49,38 +44,30 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request, Category $category)
     {   
-        $user = Auth::user();
+        if (Auth::check()) return redirect()->route('articles.login-page');
 
-        if ($user == null) {
+        $validated = $request->validated();
+        $validated['user_id'] =  Auth::id(); 
 
-            return redirect()->route('articles.login-page');
- 
+        $image_name = $request->file('image')->getClientOriginalName();
+        $file=file_get_contents($request->file('image'));
+
+        if (Storage::exists(('public/images/').$image_name) ){
+            $image_name = time()."_". $image_name;
         }
 
-        else {
-
-            $validated = $request->validated();
-            $validated['user_id'] =  Auth::user()->id; 
-
-            $image_name = $request->file('image')->getClientOriginalName();
-            $file=file_get_contents($request->file('image'));
-
-            if (Storage::exists(('public/images/').$image_name) ){
-                $image_name = time()."_". $image_name;
-            }
-
-            Storage::disk('local')->put(('public/images/').$image_name, $file );
-            $validated['image']=$image_name;
-
-            $article = Article::create($validated);
-
-            if ($request['category'] !==null) {
-                $article -> categories() ->attach($request['category']) ;
-            }
+        Storage::disk('local')->put(('public/images/').$image_name, $file);
         
-            return redirect()->route('articles.index');
+        $validated['image'] = $image_name;
 
+        $article = Article::create($validated);
+
+        if ($request['category'] !==null) {
+            $article -> categories() ->attach($request['category']) ;
         }
+    
+        return redirect()->route('articles.index');
+
         
         
     }

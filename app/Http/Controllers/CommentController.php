@@ -34,18 +34,16 @@ class CommentController extends Controller
         $user = Auth::user();
         if ($user == null) {
 
-           return redirect()->route('articles.login-page');
+            return redirect()->route('articles.login-page');
+        } else {
+            $validated = $request->validated();
 
-        }
-        else {
-            $validated = $request->validated() ;
-            $validated['user_id'] = $user->id; 
-            $validated['article_id'] = $article->id; 
-            Comment::create($validated);
+            $validated['user_id'] = $user->id;
+
+            $article->comments()->create($validated);
+
             return redirect()->route('articles.show', $article->id);
         }
-        
-        
     }
 
     /**

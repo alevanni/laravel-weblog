@@ -17,15 +17,13 @@ class ArticleSeeder extends Seeder
     public function run(): void
     {
         $categories = Category::all();
-        //factory(3)->create();
 
-        Article::factory()->count(15)->create();
-        Article::all()->each( function ($article) use ($categories) 
-        {
+        $articles = Article::factory()->count(15)->create();
+
+        $articles->each(function ($article) use ($categories) {
             $article->categories()->attach(
                 $categories->random(rand(0, 3))->pluck('id')->toArray()
             );
         });
-
     }
 }

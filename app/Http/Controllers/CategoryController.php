@@ -64,6 +64,8 @@ class CategoryController extends Controller
     public function show(Request $request)
     {   
         
+        // Category::find($request['category'])->with('articles')->first();
+
         if ($request['category'] !== null)         {
 
             if ($request['category'] != 'null') {
